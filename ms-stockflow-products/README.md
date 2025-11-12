@@ -265,15 +265,16 @@ src/main/java/com/linktic/ms_stockflow_products/
 ├── config/
 │   ├── ModelMapperConfig.java          # Configuración de ModelMapper
 │   └── OpenApiConfig.java              # Configuración de Swagger/OpenAPI
+|   └── CorsConfig.java                 # Configuración de CORS
 ├── controller/
 │   └── ProductController.java          # Controlador REST
+│   ├── dto/
+│   │   ├── ProductCreateDTO.java       # DTO para crear productos
+│   │   ├── ProductUpdateDTO.java       # DTO para actualizar productos
+│       └── ProductDTO.java             # DTO de respuesta
 ├── domain/
 │   ├── builder/
 │   │   └── ObjectBuilder.java          # Utilidad para mapeo de objetos
-│   ├── dto/
-│   │   ├── ProductRequest.java         # DTO para crear productos
-│   │   ├── ProductUpdateRequest.java   # DTO para actualizar productos
-│   │   └── ProductResponse.java        # DTO de respuesta
 │   ├── entity/
 │   │   ├── Product.java                # Entidad JPA
 │   │   └── GeneralEntityAudit.java     # Entidad base con auditoría
@@ -314,14 +315,6 @@ El proyecto utiliza SLF4J con niveles de logging configurables:
 - `INFO`: Operaciones principales del servicio
 - `DEBUG`: SQL queries de Hibernate
 - `TRACE`: Parámetros de las queries
-
-## Contribución
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
 
 ## Licencia
 

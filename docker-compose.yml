@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:16
+    container_name: stockflow-db
+    environment:
+      POSTGRES_DB: stockflow_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 6150
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./stockflow-database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d stockflow_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  products:
+    build:
+      context: ./ms-stockflow-products
+      dockerfile: Dockerfile
+    container_name: stockflow-products
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/stockflow_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 6150
+    ports:
+      - "8080:8080"
+
+  stocks:
+    build:
+      context: ./ms-stockflow-stocks
+      dockerfile: Dockerfile
+    container_name: stockflow-stocks
+    depends_on:
+      - db
+      - products
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgresql://postgres:6150@db:5432/stockflow_db?schema=public
+      PRODUCTS_SERVICE_URL: http://products:8080/api/products/
+      HTTP_TIMEOUT: 5000
+      CORS_ORIGIN: http://localhost:5173
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:

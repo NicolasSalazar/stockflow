@@ -77,16 +77,16 @@ FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 -- ============================================
 
 INSERT INTO products (name, description, price) VALUES
-('Laptop Dell XPS 13', 'Laptop ultrabook de alto rendimiento con procesador Intel i7', 1299.99),
-('Mouse Logitech MX Master 3', 'Mouse ergonómico inalámbrico para productividad', 99.99),
-('Teclado Mecánico Keychron K2', 'Teclado mecánico inalámbrico RGB', 79.99),
-('Monitor LG UltraWide 34"', 'Monitor curvo ultra wide 3440x1440', 599.99),
-('Webcam Logitech C920', 'Webcam Full HD 1080p para videoconferencias', 79.99),
-('Auriculares Sony WH-1000XM4', 'Auriculares con cancelación de ruido premium', 349.99),
-('SSD Samsung 1TB', 'Disco de estado sólido NVMe 1TB', 129.99),
-('Router ASUS RT-AX88U', 'Router WiFi 6 de alto rendimiento', 299.99),
-('Tablet iPad Air', 'Tablet Apple iPad Air 64GB', 599.99),
-('Smartwatch Garmin Fenix 6', 'Reloj inteligente deportivo con GPS', 449.99);
+('Laptop Dell XPS 13', 'Laptop ultrabook de alto rendimiento con procesador Intel i7', 1299000),
+('Mouse Logitech MX Master 3', 'Mouse ergonómico inalámbrico para productividad', 99900),
+('Teclado Mecánico Keychron K2', 'Teclado mecánico inalámbrico RGB', 79900),
+('Monitor LG UltraWide 34"', 'Monitor curvo ultra wide 3440x1440', 599900),
+('Webcam Logitech C920', 'Webcam Full HD 1080p para videoconferencias', 79900),
+('Auriculares Sony WH-1000XM4', 'Auriculares con cancelación de ruido premium', 349900),
+('SSD Samsung 1TB', 'Disco de estado sólido NVMe 1TB', 129900),
+('Router ASUS RT-AX88U', 'Router WiFi 6 de alto rendimiento', 299900),
+('Tablet iPad Air', 'Tablet Apple iPad Air 64GB', 599900),
+('Smartwatch Garmin Fenix 6', 'Reloj inteligente deportivo con GPS', 449900);
 
 INSERT INTO stock (product_code, quantity) VALUES
 (1, 15), (2, 50), (3, 30), (4, 8), (5, 25),
