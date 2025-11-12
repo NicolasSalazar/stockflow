@@ -13,6 +13,33 @@ export class StockService {
     private readonly productsService: ProductsService,
   ) {}
 
+
+  async getStockByProductCode(productCode: number) {
+    // 1. Validate product exists by calling products microservice
+    const product = await this.productsService.getProductById(productCode);
+
+    if (!product) {
+      throw new NotFoundException(`Product with code ${productCode} not found`);
+    }
+
+    // 2. Find current stock in database
+    const stock = await this.prisma.stock.findUnique({
+      where: { productCode: productCode },
+    });
+
+    if (!stock) {
+      throw new NotFoundException(`Stock not found for product ${productCode}`);
+    }
+
+    // 3. Return stock information
+    return {
+      stockCode: stock.stockCode,
+      productCode: stock.productCode,
+      quantity: stock.quantity,
+      createdAt: stock.createdAt,
+      updatedAt: stock.updatedAt,
+    };
+  }
   async purchaseProduct(productCode: number, quantity: number) {
     // 1. Validate product exists by calling products microservice
     const product = await this.productsService.getProductById(productCode);

@@ -23,13 +23,20 @@ services:
       dockerfile: Dockerfile
     container_name: stockflow-products
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/stockflow_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 6150
     ports:
       - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
 
   stocks:
     build:
@@ -37,8 +44,10 @@ services:
       dockerfile: Dockerfile
     container_name: stockflow-stocks
     depends_on:
-      - db
-      - products
+      db:
+        condition: service_healthy
+      products:
+        condition: service_healthy
     environment:
       PORT: 3000
       DATABASE_URL: postgresql://postgres:6150@db:5432/stockflow_db?schema=public
@@ -47,6 +56,28 @@ services:
       CORS_ORIGIN: http://localhost:5173
     ports:
       - "3000:3000"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  frontend:
+    build:
+      context: ./stockflow
+      dockerfile: Dockerfile
+    container_name: stockflow-frontend
+    depends_on:
+      products:
+        condition: service_healthy
+      stocks:
+        condition: service_healthy
+    environment:
+      VITE_PRODUCTS_API_URL: http://localhost:8080/api
+      VITE_STOCKS_API_URL: http://localhost:3000
+    ports:
+      - "5173:80"
 
 volumes:
   postgres_data:

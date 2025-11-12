@@ -1,4 +1,4 @@
-import { Controller, Patch, Param, Body, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Patch, Param, Body, ParseIntPipe } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -14,6 +14,37 @@ import { UpdateStockDto } from './dto/stock.dto';
 export class StockController {
   constructor(private readonly stockService: StockService) {}
 
+
+  @Get('product/:productCode')
+  @ApiOperation({ summary: 'Obtener stock disponible por código de producto' })
+  @ApiParam({
+    name: 'productCode',
+    description: 'Código del producto',
+    type: Number,
+    example: 1,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Stock encontrado',
+    schema: {
+      example: {
+        stockCode: 1,
+        productCode: 1,
+        quantity: 100,
+        createdAt: '2025-11-12T10:00:00.000Z',
+        updatedAt: '2025-11-12T10:00:00.000Z',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Producto o stock no encontrado',
+  })
+  async getStockByProductCode(
+    @Param('productCode', ParseIntPipe) productCode: number,
+  ) {
+    return this.stockService.getStockByProductCode(productCode);
+  }
   @Patch('product/:productCode/purchase')
   @ApiOperation({ summary: 'Compra de producto y actualizacion de stock' })
   @ApiParam({

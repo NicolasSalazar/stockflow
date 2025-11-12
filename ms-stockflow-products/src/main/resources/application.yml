@@ -32,6 +32,17 @@ springdoc:
     tags-sorter: alpha
   show-actuator: false
 
+# Configuración de Actuator para healthcheck
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+
 logging:
   level:
     org.hibernate.SQL: DEBUG
