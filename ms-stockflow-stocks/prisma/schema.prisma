@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model products {
+  productCode  Int       @id @default(autoincrement()) @map("product_code")
+  name         String    @db.VarChar(255)
+  description  String?
+  price        Int
+  active       Boolean?  @default(true)
+  createdAt    DateTime? @default(now()) @db.Timestamp(6) @map("created_at")
+  updatedAt    DateTime? @default(now()) @db.Timestamp(6) @map("updated_at")
+  stock        stock?
+
+  @@index([productCode], map: "idx_products_code")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model stock {
+  stockCode    Int       @id @default(autoincrement()) @map("stock_code")
+  productCode  Int       @unique @map("product_code")
+  quantity     Int       @default(0)
+  createdAt    DateTime? @default(now()) @db.Timestamp(6) @map("created_at")
+  updatedAt    DateTime? @default(now()) @db.Timestamp(6) @map("updated_at")
+  products     products  @relation(fields: [productCode], references: [productCode], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([productCode], map: "idx_stock_product_code")
+}
