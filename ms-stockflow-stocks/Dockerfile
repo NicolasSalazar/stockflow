@@ -18,11 +18,15 @@ FROM node:22.0.0-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
+# Install wget for healthcheck and other utilities
+RUN apk add --no-cache wget
+
 COPY package.json ./
 RUN npm install --omit=dev --legacy-peer-deps
 
 # Copy Prisma client generated in builder stage and schema
 COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/client
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY prisma ./prisma
 
 # Copy built dist

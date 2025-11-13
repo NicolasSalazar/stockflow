@@ -12,4 +12,4 @@ echo "Database is ready. Running migrations..."
 npx prisma migrate deploy || npx prisma db push --accept-data-loss
 
 echo "Starting application..."
-exec node dist/main.js
+exec node dist/src/main.js

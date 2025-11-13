@@ -23,6 +23,9 @@ COPY --from=builder /app/dist .
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# Create initial env-config.js
+RUN echo 'window.ENV = { VITE_PRODUCTS_API_URL: "", VITE_STOCKS_API_URL: "" };' > /usr/share/nginx/html/env-config.js
+
 # Copy environment variables script
 COPY env.sh /docker-entrypoint.d/40-env.sh
 RUN chmod +x /docker-entrypoint.d/40-env.sh
